@@ -1,0 +1,5 @@
+package schema
+
+type Test struct {
+	ID uint64
+}

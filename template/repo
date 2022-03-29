@@ -1,0 +1,110 @@
+package dao
+
+import (
+	"context"
+	"fpga-controller/internal/app/dao/model"
+	"fpga-controller/internal/app/dao/util"
+	"fpga-controller/internal/app/schema"
+	"fpga-controller/pkg/logger"
+
+	"github.com/google/wire"
+	"gorm.io/gorm"
+)
+
+var TestRepoSet = wire.NewSet(wire.Struct(new(TestRepo), "*"))
+
+type TestRepo struct {
+	DB *gorm.DB
+}
+
+func (a *TestRepo) Create(ctx context.Context, one *schema.Test) error {
+	err := util.GetDBWithModel(ctx, a.DB, &model.Test{}).Create(model.TestFrom(one)).Error
+	if err != nil {
+		logger.WithContext(ctx).Error(err)
+		return err
+	}
+	return nil
+}
+
+func (a *TestRepo) Update(ctx context.Context, one *schema.Test) error {
+	err := util.GetDBWithModel(ctx, a.DB, &model.Test{}).Where("id=?", one.ID).Updates(model.TestFrom(one)).Error
+	if err != nil {
+		logger.WithContext(ctx).Error(err)
+		return err
+	}
+	return nil
+}
+
+func (a *TestRepo) One(ctx context.Context, id uint64) (*schema.Test, error) {
+	one := &model.Test{}
+	err := util.GetDBWithModel(ctx, a.DB, &model.Test{}).Where("id=?", id).First(one).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return model.TestTo(one), nil
+}
+
+func (a *TestRepo) Has(ctx context.Context, id uint64) (bool, error) {
+	var count int64
+	err := util.GetDBWithModel(ctx, a.DB, &model.Test{}).Where("id=?", id).Count(&count).Error
+	if err != nil {
+		logger.WithContext(ctx).Error(err)
+		return false, err
+	}
+	return count > 0, nil
+}
+
+func (a *TestRepo) Delete(ctx context.Context, id uint64) error {
+	err := util.GetDBWithModel(ctx, a.DB, new(model.Test)).Delete(&model.Test{}, id).Error
+	if err != nil {
+		logger.WithContext(ctx).Error(err)
+	}
+	return err
+}
+
+type TestListReq struct {
+	PageSize  int64
+	PageIndex int64
+	//Name      string
+}
+
+func (a *TestRepo) List(ctx context.Context, req *TestListReq) ([]*schema.Test, error) {
+	records := make([]*model.Test, 0)
+	err := a.listReq(ctx, req).Find(&records).Error
+	if err != nil {
+		logger.WithContext(ctx).Error(err)
+		return nil, err
+	}
+
+	res := make([]*schema.Test, len(records))
+	for k, v := range records {
+		res[k] = model.TestTo(v)
+	}
+	return res, nil
+}
+
+func (a *TestRepo) Count(ctx context.Context, req *TestListReq) (int64, error) {
+	req.PageIndex = 0
+	req.PageIndex = 0
+	var count int64
+	err := a.listReq(ctx, req).Count(&count).Error
+	if err != nil {
+		logger.WithContext(ctx).Error(err)
+		return 0, err
+	}
+	return count, nil
+}
+
+func (a *TestRepo) listReq(ctx context.Context, req *TestListReq) *gorm.DB {
+	db := util.GetDBWithModel(ctx, a.DB, &model.Test{})
+
+	//if req.Name != "" {
+	//	db.Where("name like ?", "%"+req.Name+"%")
+	//}
+
+	db.Limit(int(req.PageSize)).Offset(int((req.PageIndex - 1) * req.PageSize))
+	return db
+}

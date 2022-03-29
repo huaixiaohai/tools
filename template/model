@@ -1,0 +1,31 @@
+package model
+
+import (
+	"fpga-controller/internal/app/schema"
+	"time"
+)
+
+type Test struct {
+	Model
+}
+
+func TestFrom(one *schema.Test) *Test {
+	if one == nil {
+		return nil
+	}
+	return &Test{
+		Model: Model{
+			ID: one.ID,
+		},
+	}
+
+}
+
+func TestTo(one *Test) *schema.Test {
+	if one  == nil {
+		return nil
+	}
+	return &schema.Test{
+		ID: one.ID,
+	}
+}

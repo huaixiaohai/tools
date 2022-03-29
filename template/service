@@ -1,0 +1,42 @@
+package service
+
+import (
+	"context"
+	"fpga-controller/internal/app/dao"
+	. "fpga-controller/internal/app/schema"
+	"github.com/google/wire"
+)
+
+var TestSrvSet = wire.NewSet(wire.Struct(new(TestSrv), "*"))
+
+type TestSrv struct {
+	TestRepo *dao.TestRepo
+}
+
+func (a *TestSrv) Create(ctx context.Context, one *Test) error {
+	return a.TestRepo.Create(ctx, one)
+}
+
+func (a *TestSrv) Update(ctx context.Context, one *Test) error {
+	return a.TestRepo.Update(ctx, one)
+}
+
+func (a *TestSrv) Get(ctx context.Context, id uint64) (*Test, error) {
+	return a.TestRepo.One(ctx, id)
+}
+
+func (a *TestSrv) Has(ctx context.Context, id uint64) (bool, error) {
+	return a.TestRepo.Has(ctx, id)
+}
+
+func (a *TestSrv) Delete(ctx context.Context, id uint64) error {
+	return a.TestRepo.Delete(ctx, id)
+}
+
+func (a *TestSrv) List(ctx context.Context, req *dao.TestListReq) ([]*Test, error) {
+	return a.TestRepo.List(ctx, req)
+}
+
+func (a *TestSrv) Count(ctx context.Context, req *dao.TestListReq) (int64, error) {
+	return a.TestRepo.Count(ctx, req)
+}
