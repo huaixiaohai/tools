@@ -17,6 +17,7 @@ const (
 )
 var requireUnimplemented *bool
 
+// usage: protoc --restful_out=. ./msg/proto/*.proto
 func main() {
 	showVersion := flag.Bool("version", false, "print the version and exit")
 	flag.Parse()
