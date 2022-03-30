@@ -2,7 +2,6 @@ package model
 
 import (
 	"fpga-controller/internal/app/schema"
-	"time"
 )
 
 type PhysicalHost struct {

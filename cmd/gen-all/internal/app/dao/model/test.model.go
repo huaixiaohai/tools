@@ -2,18 +2,17 @@ package model
 
 import (
 	"fpga-controller/internal/app/schema"
-	"time"
 )
 
-type http struct {
+type test struct {
 	Model
 }
 
-func httpFrom(one *schema.http) *http {
+func testFrom(one *schema.test) *test {
 	if one == nil {
 		return nil
 	}
-	return &http{
+	return &test{
 		Model: Model{
 			ID: one.ID,
 		},
@@ -21,11 +20,11 @@ func httpFrom(one *schema.http) *http {
 
 }
 
-func httpTo(one *http) *schema.http {
+func testTo(one *test) *schema.test {
 	if one  == nil {
 		return nil
 	}
-	return &schema.http{
+	return &schema.test{
 		ID: one.ID,
 	}
 }

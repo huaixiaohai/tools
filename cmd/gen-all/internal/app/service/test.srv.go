@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"fpga-controller/internal/app/dao"
-	. "fpga-controller/internal/app/schema"
 	"github.com/google/wire"
 )
 

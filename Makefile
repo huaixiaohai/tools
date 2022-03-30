@@ -9,18 +9,21 @@ BIN_DIR        ?= $(CURDIR)/bin
 # 构建并编译出静态可执行文件
 all: linux_build
 
-build:
-	go mod tidy
-	packr2 build
-	go build -o $(BIN_DIR)/tools main.go main-packr.go
+#build:
+#	go mod tidy
+#	packr2 build
+#	go build -o $(BIN_DIR)/tools main.go main-packr.go
 
-run:
-	go run main.go
+#run:
+#	go run main.go
 
-# 交叉编译出linux下的静态可执行文件build
-linux_build:
-	$(COMMONENVVAR) $(BUILDENVVAR) make build
+## 交叉编译出linux下的静态可执行文件build
+#linux_build:
+#	$(COMMONENVVAR) $(BUILDENVVAR) make build
 
-install:
-	make build
-	go install
+gen-all:
+	packr2
+	go build -o $(BIN_DIR)/gen-all cmd/gen-all/main.go
+
+protoc-gen-restful:
+	go install cmd/protoc-gen-restful/main.go

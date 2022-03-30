@@ -5,4 +5,4 @@
 // and any other packr generated files.
 package main
 
-import _ "github.com/huaixiaohai/tools/packrd"
+import _ "github.com/huaixiaohai/tools/cmd/gen-all/packrd"
