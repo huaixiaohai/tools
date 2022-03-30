@@ -1,4 +1,4 @@
-package main
+package gen
 
 import (
 	"fmt"
@@ -8,11 +8,15 @@ import (
 )
 
 const (
+	ginPackage = protogen.GoImportPath("github.com/gin-gonic/gin")
+)
+
+const (
 	jsonTag = "json"
 	formTag = "form"
 )
 
-func generateFile(plugin *protogen.Plugin, file *protogen.File) *protogen.GeneratedFile {
+func GenerateFile(plugin *protogen.Plugin, file *protogen.File) *protogen.GeneratedFile {
 	//if len(file.Services) == 0 {
 	//	return nil
 	//}

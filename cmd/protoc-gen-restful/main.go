@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	gen2 "github.com/huaixiaohai/tools/cmd/protoc-gen-restful/gen"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/types/pluginpb"
 )
@@ -13,7 +14,6 @@ const (
 	version = "1.2.0"
 
 	//contextPackage = protogen.GoImportPath("context")
-	ginPackage = protogen.GoImportPath("github.com/gin-gonic/gin")
 )
 var requireUnimplemented *bool
 
@@ -36,7 +36,7 @@ func main() {
 			if !f.Generate {
 				continue
 			}
-			generateFile(gen, f)
+			gen2.GenerateFile(gen, f)
 		}
 		return nil
 	})
