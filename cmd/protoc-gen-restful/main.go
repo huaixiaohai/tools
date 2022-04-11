@@ -19,6 +19,15 @@ var requireUnimplemented *bool
 
 // usage: protoc --restful_out=. ./msg/proto/*.proto
 func main() {
+	//////buf := make([]byte, 0)
+	//////buf, _ = ioutil.ReadAll(os.Stdin)
+	////////println(err.Error())
+	//////os.WriteFile("a.txt",buf,0666)
+	//buf, err := os.ReadFile("a.txt")
+	//var err error
+	//os.Stdin, err = os.Open("a.txt")
+	//println(err)
+
 	showVersion := flag.Bool("version", false, "print the version and exit")
 	flag.Parse()
 	if *showVersion {
